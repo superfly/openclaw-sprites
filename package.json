@@ -1,5 +1,5 @@
 {
-  "name": "@fly/openclaw-sprites",
+  "name": "openclaw-sprites",
   "version": "0.1.0",
   "description": "OpenClaw sandbox backend that runs agent tool execution inside Fly.io Sprites.",
   "license": "Apache-2.0",
@@ -50,7 +50,7 @@
       "./dist/index.js"
     ],
     "install": {
-      "npmSpec": "@fly/openclaw-sprites",
+      "npmSpec": "openclaw-sprites",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.8.1"
     },

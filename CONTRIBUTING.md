@@ -1,4 +1,4 @@
-# Contributing to @fly/openclaw-sprites
+# Contributing to openclaw-sprites
 
 This document covers how the plugin is built, how it fits into OpenClaw, and
 how to work on it. For installation and usage, see the [README](README.md).

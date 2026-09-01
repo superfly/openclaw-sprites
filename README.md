@@ -1,4 +1,4 @@
-# @fly/openclaw-sprites
+# openclaw-sprites
 
 Give your OpenClaw agents an isolated, ready-to-use Linux computer in the cloud.
 
@@ -41,12 +41,12 @@ plugin long-term, consider the restrictions in [Token scoping](#token-scoping).
 Run these commands on the same computer that runs the OpenClaw Gateway:
 
 ```bash
-openclaw plugins install npm:@fly/openclaw-sprites
+openclaw plugins install npm:openclaw-sprites
 openclaw secrets store set SPRITES_TOKEN --kind secret
 ```
 
 OpenClaw may ask you to confirm the npm source or plugin capabilities. Check
-that the package name is exactly `@fly/openclaw-sprites` before accepting.
+that the package name is exactly `openclaw-sprites` before accepting.
 
 The second command displays a hidden prompt. Paste the Sprites token and press
 Enter. The token is stored as a protected OpenClaw secret instead of being

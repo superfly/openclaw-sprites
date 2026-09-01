@@ -1,0 +1,269 @@
+{
+  "id": "sprites",
+  "name": "Sprites Sandbox",
+  "description": "Run OpenClaw sandboxed tool execution inside Fly.io Sprites.",
+  "activation": {
+    "onStartup": true
+  },
+  "cliCommands": [
+    {
+      "name": "sprites",
+      "description": "Inspect and wake Fly.io Sprites used as OpenClaw sandboxes",
+      "hasSubcommands": true
+    }
+  ],
+  "commandAliases": [
+    {
+      "name": "sprites",
+      "kind": "cli"
+    }
+  ],
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "token": {
+        "description": "Sprites API token: a string or a SecretRef object. Falls back to SPRITES_TOKEN.",
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "apiUrl": {
+        "type": "string",
+        "minLength": 1
+      },
+      "timeoutSeconds": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 3600
+      },
+      "wake": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "timeoutSeconds": {
+            "type": "number",
+            "minimum": 5,
+            "maximum": 1800
+          },
+          "maxRetrySeconds": {
+            "type": "number",
+            "minimum": 0.25,
+            "maximum": 60
+          },
+          "keepAwakeMinutes": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 240
+          }
+        }
+      },
+      "sandbox": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "instanceId": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "maxLength": 32
+          },
+          "namePrefix": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]*)*$",
+            "maxLength": 40
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "runtime": {
+            "type": "string",
+            "enum": [
+              "default",
+              "dev"
+            ]
+          },
+          "sprite": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "ramMB": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "cpus": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "region": {
+                "type": "string",
+                "minLength": 1
+              },
+              "storageGB": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
+          },
+          "network": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "rules"
+            ],
+            "properties": {
+              "rules": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "domain": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "action": {
+                      "type": "string",
+                      "enum": [
+                        "allow",
+                        "deny"
+                      ]
+                    },
+                    "include": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "privileges": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "profile": {
+                "type": "string",
+                "enum": [
+                  "",
+                  "minimal",
+                  "standard",
+                  "privileged"
+                ]
+              },
+              "devices": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "noNewPrivileges": {
+                "type": "boolean"
+              }
+            }
+          },
+          "checkpointAfterSetup": {
+            "type": "boolean"
+          },
+          "remoteWorkspaceDir": {
+            "type": "string",
+            "pattern": "^/.+"
+          },
+          "remoteAgentWorkspaceDir": {
+            "type": "string",
+            "pattern": "^/.+"
+          },
+          "maxRunAfterDisconnect": {
+            "type": "string",
+            "pattern": "^\\d+(?:\\.\\d+)?(?:ms|s|m|h)$"
+          }
+        }
+      }
+    }
+  },
+  "uiHints": {
+    "token": {
+      "label": "Sprites token",
+      "help": "Sprites API token (string or SecretRef). Falls back to the SPRITES_TOKEN environment variable."
+    },
+    "apiUrl": {
+      "label": "API URL",
+      "help": "Sprites control plane. Default https://api.sprites.dev.",
+      "advanced": true
+    },
+    "sandbox.namePrefix": {
+      "label": "Sprite name prefix",
+      "help": "Every sandbox sprite is named <prefix><Gateway-and-scope hash>. Match it to the token's name_prefix policy."
+    },
+    "sandbox.instanceId": {
+      "label": "Gateway instance ID",
+      "help": "Stable ownership ID for this Gateway. Generated and persisted automatically when omitted.",
+      "advanced": true
+    },
+    "sandbox.labels": {
+      "label": "Extra labels",
+      "help": "Additional labels applied to sandbox sprites.",
+      "advanced": true
+    },
+    "sandbox.runtime": {
+      "label": "Runtime",
+      "help": "Sprite runtime variant: default or dev.",
+      "advanced": true
+    },
+    "sandbox.sprite": {
+      "label": "Sprite size",
+      "help": "ramMB, cpus, region, storageGB for new sprites.",
+      "advanced": true
+    },
+    "sandbox.network": {
+      "label": "Network policy",
+      "help": "Egress allowlist applied when a sprite is created."
+    },
+    "sandbox.privileges": {
+      "label": "Privileges policy",
+      "help": "Process privilege profile applied at creation.",
+      "advanced": true
+    },
+    "sandbox.checkpointAfterSetup": {
+      "label": "Checkpoint after setup",
+      "help": "Take a checkpoint once the workspace is seeded and setupCommand has run; `openclaw sprites reset` restores it."
+    },
+    "sandbox.remoteWorkspaceDir": {
+      "label": "Remote workspace dir",
+      "help": "Writable workspace inside the sprite.",
+      "advanced": true
+    },
+    "sandbox.remoteAgentWorkspaceDir": {
+      "label": "Remote agent dir",
+      "help": "Mirror of the agent workspace when workspaceAccess is read-only.",
+      "advanced": true
+    },
+    "timeoutSeconds": {
+      "label": "Request timeout",
+      "help": "Timeout for control-plane and setup requests.",
+      "advanced": true
+    },
+    "wake": {
+      "label": "Sleep and wake",
+      "help": "timeoutSeconds: how long to wait for a suspended sprite to resume (default 120). keepAwakeMinutes: keep the sprite awake this long after the last tool call (default 0 = let it sleep)."
+    },
+    "sandbox.maxRunAfterDisconnect": {
+      "label": "Run after disconnect",
+      "help": "How long a command may keep running after the Gateway disconnects (default 10s).",
+      "advanced": true
+    },
+    "sandbox": {
+      "label": "Sandbox backend",
+      "help": "Settings for running OpenClaw sandboxed tools inside sprites (backend: \"sprites\")."
+    }
+  }
+}

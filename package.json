@@ -1,0 +1,61 @@
+{
+  "name": "@fly/openclaw-sprites",
+  "version": "0.1.0",
+  "description": "OpenClaw sandbox backend that runs agent tool execution inside Fly.io Sprites.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/superfly/openclaw-sprites.git"
+  },
+  "homepage": "https://github.com/superfly/openclaw-sprites#readme",
+  "bugs": {
+    "url": "https://github.com/superfly/openclaw-sprites/issues"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "openclaw.plugin.json",
+    "README.md",
+    "CONTRIBUTING.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check": "tsc -p tsconfig.json --noEmit",
+    "test": "tsc -p tsconfig.json && vitest run",
+    "test:live": "SPRITES_LIVE=1 vitest run --testTimeout 300000 src/live.test.ts"
+  },
+  "dependencies": {
+    "@fly/sprites": "0.2.2",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.0",
+    "commander": "15.0.0",
+    "openclaw": "2026.8.2",
+    "typescript": "5.9.3",
+    "vitest": "4.0.18",
+    "ws": "8.21.3",
+    "@types/ws": "8.18.1"
+  },
+  "peerDependencies": {
+    "openclaw": ">=2026.8.1"
+  },
+  "engines": {
+    "node": ">=22.22.3"
+  },
+  "openclaw": {
+    "extensions": [
+      "./dist/index.js"
+    ],
+    "install": {
+      "npmSpec": "@fly/openclaw-sprites",
+      "defaultChoice": "npm",
+      "minHostVersion": ">=2026.8.1"
+    },
+    "compat": {
+      "pluginApi": ">=2026.8.1"
+    }
+  }
+}

@@ -38,6 +38,7 @@ import {
   instanceLabel,
   readyMarkerPath,
   scopeHash,
+  streamTarDirectory,
 } from "./backend.js";
 import { SpritesGateway } from "../core/client.js";
 import { resolveSpritesPluginConfig, type ResolvedSpritesPluginConfig, type ResolvedSpritesSandboxConfig } from "../config.js";
@@ -422,6 +423,31 @@ describe("SpritesSandboxBackendImpl", () => {
       impl.stopKeepAwake();
     } finally {
       vi.useRealTimers();
+    }
+  });
+});
+
+describe("streamTarDirectory", () => {
+  it("delivers the full archive to a consumer that attaches late", async () => {
+    // The real consumer is client.exec(), which awaits an ensureAwake HTTP
+    // round trip and a WebSocket handshake before it reads the stream. By
+    // then tar has exited, and Node's flushStdio() has resumed and discarded
+    // unconsumed stdio. Regression test for the resulting empty upload
+    // ("tar: This does not look like a tar archive" in the sprite).
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-tar-test-"));
+    try {
+      await fs.writeFile(path.join(dir, "file.txt"), "payload".repeat(64));
+      const bytes = await streamTarDirectory(dir, async (archive) => {
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        let total = 0;
+        for await (const chunk of archive) {
+          total += chunk.length;
+        }
+        return total;
+      });
+      expect(bytes).toBeGreaterThan(0);
+    } finally {
+      await fs.rm(dir, { recursive: true, force: true });
     }
   });
 });

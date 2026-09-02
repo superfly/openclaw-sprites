@@ -13,6 +13,7 @@ import { spawn } from "node:child_process";
 import { createHash, randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { PassThrough } from "node:stream";
 import { fileURLToPath } from "node:url";
 import type { PluginLogger } from "openclaw/plugin-sdk/core";
 import {
@@ -671,6 +672,8 @@ export async function streamTarDirectory<T>(
   consume: (archive: AsyncIterable<Uint8Array>) => Promise<T>,
 ): Promise<T> {
   const child = spawn("tar", ["-cf", "-", "-C", dir, "."], { stdio: ["ignore", "pipe", "pipe"] });
+  const relay = new PassThrough();
+  child.stdout.pipe(relay);
   const errors: Buffer[] = [];
   let errorBytes = 0;
   child.stderr.on("data", (chunk: Buffer) => {
@@ -690,10 +693,11 @@ export async function streamTarDirectory<T>(
     });
   });
   try {
-    const [result] = await Promise.all([consume(child.stdout), completed]);
+    const [result] = await Promise.all([consume(relay), completed]);
     return result;
   } catch (error) {
     child.kill("SIGKILL");
+    relay.destroy();
     await completed.catch(() => undefined);
     throw error;
   }

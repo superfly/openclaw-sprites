@@ -3,7 +3,7 @@
  * `openclaw sprites` CLI.
  */
 import { resolveConfiguredSecretInputString } from "openclaw/plugin-sdk/config-runtime";
-import { buildPluginConfigSchema, type OpenClawConfig } from "openclaw/plugin-sdk/core";
+import type { OpenClawConfig } from "openclaw/plugin-sdk/core";
 import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
 import { registerSandboxBackend } from "openclaw/plugin-sdk/sandbox";
 import { resolveStateDir } from "openclaw/plugin-sdk/state-paths";
@@ -19,11 +19,10 @@ import { SpritesGateway } from "./src/core/client.js";
 import { registerSpritesCli } from "./src/sandbox/cli.js";
 import { createInstanceIdResolver } from "./src/sandbox/identity.js";
 import {
-  SPRITES_PLUGIN_UI_HINTS,
-  SpritesPluginConfigSchema,
   resolveSpritesPluginConfig,
   type ResolvedSpritesPluginConfig,
 } from "./src/config.js";
+import { spritesPluginConfigSchema } from "./src/plugin-config-schema.js";
 
 const TOKEN_CONFIG_PATH = "plugins.entries.sprites.config.token";
 
@@ -71,7 +70,7 @@ export default definePluginEntry({
   id: SPRITES_BACKEND_ID,
   name: "Sprites Sandbox",
   description: "Run OpenClaw sandboxed tool execution inside Fly.io Sprites.",
-  configSchema: buildPluginConfigSchema(SpritesPluginConfigSchema, { uiHints: SPRITES_PLUGIN_UI_HINTS }),
+  configSchema: spritesPluginConfigSchema,
   register(api) {
     const pluginConfig = resolveSpritesPluginConfig(api.pluginConfig);
     const resolveToken = createTokenResolver({ pluginConfig, getConfig: () => api.config });

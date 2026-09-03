@@ -3,10 +3,29 @@
 This document covers how the plugin is built, how it fits into OpenClaw, and
 how to work on it. For installation and usage, see the [README](README.md).
 
+By participating, you agree to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
+Report vulnerabilities privately using [SECURITY.md](SECURITY.md), and see
+[SUPPORT.md](SUPPORT.md) for product and account questions.
+
+## Pull requests and review
+
+Search existing issues before opening a bug report or feature request. For
+contributions, fork or branch from `main`, keep the change focused, and explain
+the user-facing problem and resulting behavior. Update relevant documentation
+and tests, then run the development checks below.
+
+Pull requests require the `Validate and test` CI check, one code-owner approval,
+an up-to-date branch, and resolved review conversations. New changes dismiss
+stale approvals. Use squash or rebase merging to preserve linear history.
+Repository administrators can override merge requirements when needed.
+
+Contributions are distributed under the repository's
+[Apache License 2.0](LICENSE).
+
 ## Development setup
 
 ```bash
-npm install
+npm ci --ignore-scripts
 npm test          # type-checks, builds dist/, then runs the unit tests
 npm run check     # type-check only
 npm run build     # compile to dist/
@@ -187,7 +206,7 @@ reset does not accidentally trigger another seed and setup pass.
 
 ## Tests
 
-`npm test` builds first (the shim test spawns `dist/src/exec-shim.js`) and
+`npm test` builds first (the shim test spawns `dist/src/sandbox/exec-shim.js`) and
 then runs vitest.
 
 - `src/test-support/fake-sprites-server.ts` is an in-process stand-in for
@@ -214,7 +233,8 @@ SPRITES_TOKEN=... npm run test:live
 
 ## Releasing
 
-`npm pack` includes `dist/`, `openclaw.plugin.json`, and the README. The
+Run `npm run build` before `npm pack`. The package includes `dist/`,
+`openclaw.plugin.json`, the license, and the README. The
 `openclaw.extensions` entry in `package.json` points at `dist/index.js`;
 keep `openclaw.plugin.json` and the zod schemas in `src/core/config.ts` and
 `src/sandbox/config.ts` in sync when adding config keys. Bump `peerDependencies.openclaw` and

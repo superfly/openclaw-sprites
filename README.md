@@ -360,3 +360,10 @@ disconnect timeouts do not require recreation.
 
 Development setup, architecture notes, and the test suite are described in
 [CONTRIBUTING.md](CONTRIBUTING.md).
+
+For help, see [SUPPORT.md](SUPPORT.md). Report vulnerabilities privately using
+[SECURITY.md](SECURITY.md).
+
+## License
+
+[Apache License 2.0](LICENSE).

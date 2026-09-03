@@ -1,3 +1,9 @@
 node_modules
 dist
 *.tgz
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+coverage/

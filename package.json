@@ -32,12 +32,12 @@
   },
   "devDependencies": {
     "@types/node": "22.19.0",
+    "@types/ws": "8.18.1",
     "commander": "15.0.0",
     "openclaw": "2026.8.2",
     "typescript": "5.9.3",
-    "vitest": "4.0.18",
-    "ws": "8.21.3",
-    "@types/ws": "8.18.1"
+    "vitest": "4.1.11",
+    "ws": "8.21.3"
   },
   "peerDependencies": {
     "openclaw": ">=2026.8.1"

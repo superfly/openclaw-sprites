@@ -28,14 +28,14 @@
   },
   "dependencies": {
     "@fly/sprites": "0.2.2",
-    "zod": "4.4.3"
+    "zod": "4.5.4"
   },
   "devDependencies": {
-    "@types/node": "22.19.0",
+    "@types/node": "26.4.0",
     "@types/ws": "8.18.1",
     "commander": "15.0.0",
     "openclaw": "2026.8.2",
-    "typescript": "5.9.3",
+    "typescript": "7.0.2",
     "vitest": "4.1.11",
     "ws": "8.21.3"
   },

@@ -2,7 +2,7 @@
  * Plugin entrypoint: registers the `sprites` sandbox backend and the
  * `openclaw sprites` CLI.
  */
-import { resolveConfiguredSecretInputString } from "openclaw/plugin-sdk/config-runtime";
+import { resolveConfiguredSecretInputString } from "openclaw/plugin-sdk/secret-input-runtime";
 import type { OpenClawConfig } from "openclaw/plugin-sdk/core";
 import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
 import { registerSandboxBackend } from "openclaw/plugin-sdk/sandbox";

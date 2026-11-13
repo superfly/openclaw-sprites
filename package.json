@@ -34,7 +34,7 @@
     "@types/node": "26.6.6",
     "@types/ws": "8.18.2",
     "commander": "15.0.0",
-    "openclaw": "2026.10.8",
+    "openclaw": "2026.11.3",
     "typescript": "7.0.2",
     "vitest": "5.0.5",
     "ws": "8.22.0"
